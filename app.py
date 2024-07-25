@@ -33,15 +33,12 @@ def index():
 def main():
     queue = Queue()
     queue.enqueue("TaoSiyu", "Systemcall0122")
-    queue.enqueue("wangjy", "123456")
-    queue.enqueue("zhiqiangma", "12345678")
-    queue.enqueue("wangyuheng", "1234567")
+    queue.enqueue("T1", "Systemcall01")
+    queue.enqueue("T2", "Systemcall0")
+    queue.enqueue("T3", "Systemcall")
 
     r = request.form.get("q")
     v = request.form.get("t")
-
-    if r is None or v is None:
-        return render_template("index.html")
 
     current = queue.head
     found = 0
