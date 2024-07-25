@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Contract Interaction</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            background-image: url('https://img0.baidu.com/it/u=448861572,1584308189&fm=253&fmt=auto&app=138&f=JPEG?w=1215&h=729'); 
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: 'Press Start 2P', cursive;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            font-size: 1em;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #2c0971;
+            background: rgba(229, 213, 213, 0.5);
+            color: #fff;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 300px;
+        }
+        button, input[type="submit"] {
+            font-size: 1em;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        button:hover, input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        p#storedValue {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Storage Contract Interaction</h1>
+    <div class="container">
+        <div>
+            <h2>Store a Value</h2>
+            <input type="number" id="valueToStore" placeholder="Enter value to store">
+            <button onclick="storeValue()">Store Value</button>
+        </div>
+        <div>
+            <h2>View Stored Value</h2>
+            <button onclick="viewStoredValue()">View Value</button>
+            <p id="storedValue"></p>
+        </div>
+        <form action="/main" method="post">
+            <input type="submit" value="Main">
+        </form>
+        <form action="/" method="post">
+            <input type="submit" value="Login Page">
+        </form>
+    </div>
+    <script>
+        if (typeof window.ethereum !== 'undefined') {
+            console.log('MetaMask is installed!');
+            var web3 = new Web3(window.ethereum);
+            window.ethereum.enable();
+        } else {
+            console.log('MetaMask is not installed. Please install MetaMask to use this application.');
+        }
+
+        const contractABI = [
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "num",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "store",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "view_money",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+
+        const contractAddress = '0x3b0d351c67205047662266a622efb83ed7eec197';
+
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+        async function storeValue() {
+            const value = document.getElementById('valueToStore').value;
+            const accounts = await web3.eth.getAccounts();
+            contract.methods.store(value).send({ from: accounts[0] })
+                .on('receipt', function(receipt) {
+                    console.log('Value stored successfully');
+                })
+                .on('error', function(error) {
+                    console.error('Error storing value:', error);
+                });
+        }
+
+        async function viewStoredValue() {
+            try {
+                const value = await contract.methods.view_money().call();
+                document.getElementById('storedValue').innerText = value;
+            } catch (error) {
+                console.error('Error fetching stored value:', error);
+                document.getElementById('storedValue').innerText = 'Error fetching value';
+            }
+        }
+    </script>
+</body>
+</html>
