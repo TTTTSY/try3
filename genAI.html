@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image:url('https://img1.baidu.com/it/u=2497331914,3366327396&fm=253&fmt=auto?w=1422&h=800');
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h2 {
+            color: #007BFF;
+        }
+
+        h4 {
+            margin: 20px 0;
+            color: #555;
+        }
+
+        form {
+            margin: 10px 0;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Reply</h2>
+        <h4>{{r}}</h4>
+
+        <form action="/main" method="post">
+            <p><input type="submit" value="Main"></p>
+        </form>
+
+        <form action="/" method="post">
+            <p><input type="submit" value="Login Page"></p>
+        </form>
+    </div>
+</body>
+</html>
